@@ -1,40 +1,38 @@
 // Import AsyncStorage untuk mengakses data lokal yang disimpan sebelumnya
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Import React hooks: useEffect untuk efek samping, useState untuk state lokal
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 // Import komponen dan styling dari React Native
 import { StyleSheet, Text, View, Button } from 'react-native';
 // Import komponen dari expo-router untuk navigasi
 import { useRouter } from 'expo-router';
+// Import komponen AuthContext untuk mengelola otentikasi pengguna
+import {useAuth} from '../context/AuthContext';
 
 
 // Komponen utama Profil
 export default function Profil() {
   // State untuk menyimpan username pengguna yang login
-  const [username, setUsername] = useState('');
+  const { user } = useAuth(); // Menggunakan hook useAuth untuk mendapatkan informasi pengguna
   // Menggunakan hook useRouter untuk mendapatkan objek router
   const router = useRouter();
 
 
+
   // useEffect dipanggil sekali saat komponen dimuat (mount)
   useEffect(() => {
-    // Fungsi async untuk mengambil data pengguna dari AsyncStorage
-    const fetchUser = async () => {
-      const user = await AsyncStorage.getItem('user'); // Ambil data dengan key 'user'
-      if (user) {
-        const parsed = JSON.parse(user);              // Parse dari string JSON ke object
-        setUsername(parsed.username);                 // Simpan username ke state
-      }
-    };
-    fetchUser(); // Panggil fungsi
-  }, []);
+    if (!user) {
+      // Jika tidak ada pengguna yang login, arahkan ke halaman login
+      router.replace('/auth/login');
+    }
+  }, [user]); // Dependensi adalah user, jika user berubah maka efek ini akan dijalankan
 
   // Tampilan UI
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profil Pengguna</Text>
       {/* Tampilkan username */}
-      <Text style={styles.subtitle}>Nama: {username}</Text> 
+      <Text style={styles.subtitle}>Nama: {user?.username} </Text> 
       <Button title="Edit Profil" onPress={() => router.push('/edit-profil')} />
     </View>
   );
