@@ -1,43 +1,43 @@
+// Import komponen Tabs dari expo-router
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+// Import ikon dari pustaka Ionicons yang disediakan oleh @expo/vector-icons
+import { Ionicons } from '@expo/vector-icons';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
+// Komponen utama untuk mengatur layout navigasi tab
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+    <Tabs>
+      {/* Tab pertama: Beranda */}
       <Tabs.Screen
-        name="index"
+        name="index" // Mengarah ke file app/(tabs)/index.tsx
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Beranda', // Judul yang tampil di tab
+          tabBarIcon: ({ color, size }) => (
+            // Menampilkan ikon dengan nama "home-outline"
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
         }}
       />
+      {/* Tab kedua: Profil */}
       <Tabs.Screen
-        name="explore"
+        name="profil" // Mengarah ke file app/(tabs)/profil.tsx
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Profil',
+          tabBarIcon: ({ color, size }) => (
+            // Ikon "person-circle-outline" untuk profil
+            <Ionicons name="person-circle-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      {/* Tab ketiga: Pengaturan */}
+      <Tabs.Screen
+        name="pengaturan" // Mengarah ke file app/(tabs)/pengaturan.tsx
+        options={{
+          title: 'Pengaturan',
+          tabBarIcon: ({ color, size }) => (
+            // Ikon "settings-outline" untuk pengaturan
+            <Ionicons name="settings-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>
